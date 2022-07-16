@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import User from './User';
 import UserDetails from './UserDetails';
+import no_data from '../public/no_data.png'
+import Image from 'next/image'
 
 const UserList = () => {
 
@@ -9,6 +11,7 @@ const UserList = () => {
 
     const [click, setClick] = useState(false)
     const [uid, setUid] = useState()
+    const [error, setError] = useState(false)
 
 
     const fetchUsers = async () => {
@@ -16,7 +19,8 @@ const UserList = () => {
             const res = await axios.get('https://602e7c2c4410730017c50b9d.mockapi.io/users')
             setUsers(res.data)
         } catch (error) {
-            console.error(`Error: ${error}`)
+            setError(true)
+            console.error(`Internal Server Error: ${error}`)
         }
     }
 
@@ -25,6 +29,9 @@ const UserList = () => {
     }, [])
 
     return (
+        <>
+        {error ? <div className='absolute top-[0px] left-[400px]  w-[700px] h-full '> <Image src={no_data} alt="No data found" /></div>
+        :
         <div>
             {/* Heading  */}
             <div className='w-[623px] h-[70px] absolute top-[175px] left-[105px] bg-[#C5DFFF] rounded-tl-[8px] rounded-tr-[8px] text-black py-[20px] pl-[223px] font-[500] text-[24px] leading-[29px] '>USERS LIST</div>
@@ -55,6 +62,8 @@ const UserList = () => {
 
 
         </div>
+        }
+        </>
     )
 }
 
